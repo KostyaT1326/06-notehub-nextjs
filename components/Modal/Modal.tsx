@@ -1,3 +1,4 @@
+'use client'; 
 
 import React, { useEffect } from 'react';
 import { createPortal } from 'react-dom';
@@ -10,14 +11,21 @@ interface ModalProps {
   children: ReactNode;
 }
 
-const modalRoot = document.getElementById('modal-root') || (() => {
-  const el = document.createElement('div');
-  el.id = 'modal-root';
-  document.body.appendChild(el);
-  return el;
-})();
+
 
 const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
+  const [modalRoot, setModalRoot] = React.useState<HTMLElement | null>(null);
+
+  React.useEffect(() => {
+    let root = document.getElementById('modal-root');
+    if (!root) {
+      root = document.createElement('div');
+      root.id = 'modal-root';
+      document.body.appendChild(root);
+    }
+    setModalRoot(root);
+  }, []);
+
   useEffect(() => {
     if (!isOpen) return;
     const handleEsc = (e: KeyboardEvent) => {
@@ -27,7 +35,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
     return () => window.removeEventListener('keydown', handleEsc);
   }, [isOpen, onClose]);
 
-  if (!isOpen) return null;
+  if (!isOpen || !modalRoot) return null;
   return createPortal(
     <div
       className={css.backdrop}

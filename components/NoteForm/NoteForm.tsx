@@ -2,11 +2,11 @@
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRef } from 'react';
-import { createNote } from '../../services/noteService';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import type { FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import css from './NoteForm.module.css';
+import { createNote } from '@/lib/api';
 
 interface NoteFormProps {
   onCancel: () => void;

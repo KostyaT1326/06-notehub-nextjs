@@ -1,29 +1,11 @@
 import axios from "axios";
 import type { Note } from '../types/note';
 
-export type NoteListResponse = {
-  notes: Note[];
-  total: number;
-};
-
-axios.defaults.baseURL = "https://next-docs-api.onrender.com";
-
-export const getNotes = async () => {
-  const res = await axios.get<NoteListResponse>("/notes");
-  return res.data;
-};
-
-
-// код з ДЗ 5
-const API_URL = 'https://notehub-public.goit.study/api/';
-
-const token = process.env.NEXT_PUBLIC_NOTEHUB_TOKEN;
-
 const axiosInstance = axios.create({
-    baseURL: API_URL,
-    headers: {
-    Authorization: `Bearer ${token}`,
-    },
+  baseURL: "https://notehub-public.goit.study/api",
+  headers: {
+    Authorization: `Bearer ${process.env.NEXT_PUBLIC_NOTEHUB_TOKEN}`,
+  },
 });
 
 export interface FetchNotesParams {
@@ -60,6 +42,6 @@ const response = await axiosInstance.delete<Note>(`/notes/${id}`);
 }
 
 export const getSingleNote = async (id: string) => {
-  const res = await axios.get<Note>(`/notes/${id}`);
+  const res = await axiosInstance.get<Note>(`/notes/${id}`);
   return res.data;
 };
